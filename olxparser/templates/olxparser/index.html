@@ -1,0 +1,115 @@
+{% extends 'olxparser/navbar.html' %}
+
+{% block content %}
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1>Объявления по продаже легковых автомобилей</h1>
+      <p class="lead text-muted">Для Вас доступна загрузка первых {{ amount_requested_ads }} объявлений</p>
+      <p>
+        <button class="btn btn-primary my-2" type="button" onclick="loadCarsAds()">Обновить</button>
+        <select class="custom-select col-md-3 ml-2" id="select_sort_param" onchange="getAdsOrderedByPrice(this.value)">
+          <option id="default_ads_sort" value="default" selected disabled>Сортировать по...</option>
+          <option id="lower_to_max_ads_sort" value="lower_to_max">Возрастанию цены</option>
+          <option id="max_to_lower_ads_sort" value="max_to_lower">Убыванию цены</option>
+        </select>
+      </p>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light d-flex flex-column align-items-center">
+    <div class="container">
+      <div class="row js-ads-box">
+        {% for car_ad in showed_ads %}
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+              {% if is_car_img_shown %}
+                <img class="bd-placeholder-img card-img-top" src="{{ car_ad.link_to_car_img }}" width="348" height="225"
+                  style="object-fit: cover">
+              {% endif %}
+              <div class="card-body">
+                {% if is_seller_name_shown %}
+                  <h3 class="lead">{{ car_ad.seller_name }}</h3>
+                {% endif %}
+                <p class="card-text">{{ car_ad.title_ad }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <a class="btn btn-sm mr-2 btn-outline-primary" href="{{ car_ad.link_to_ad }}" target="_blank">Перейти</a>
+                    <button class="btn btn-sm btn-outline-danger" type="button" onclick="deleteAd(this)">Удалить</button>
+                  </div>
+                  <small class="text-muted">{{ car_ad.car_price }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="spinner-border text-primary d-none mt-3" id="spinner_box" role="status"></div>
+  </div>
+
+  {% if showed_ads.paginator %}
+    <nav class="container d-flex justify-content-between border-top mt-2 py-2" id="django_paginator"
+      aria-label="Page navigation">
+      <p class="lead text-muted">Страница {{ showed_ads.number }} из {{ showed_ads.paginator.num_pages }}</p>
+      <ul class="pagination">
+        {% if showed_ads.has_previous %}
+        
+          {% if showed_ads.previous_page_number != 1 %}
+            <li class="page-item">
+              <a class="page-link" href="?page=1{{ sorted_by_price }}" aria-label="First page">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ showed_ads.previous_page_number }}{{ sorted_by_price }}" aria-label="Previous page">
+              {{ showed_ads.previous_page_number }}
+            </a>
+          </li>
+          
+        {% endif %}
+        <li class="page-item {% if showed_ads.paginator.num_pages == 1 %}disabled{% else %}active{% endif %}">
+          <a class="page-link" href="#">{{ showed_ads.number }}</a>
+        </li>
+        {% if showed_ads.has_next %}
+
+          <li class="page-item">
+            <a class="page-link" href="?page={{ showed_ads.next_page_number }}{{ sorted_by_price }}" aria-label="Next page">
+              {{ showed_ads.next_page_number }}
+            </a>
+          </li>
+          {% if showed_ads.next_page_number != showed_ads.paginator.num_pages %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ showed_ads.paginator.num_pages }}{{ sorted_by_price }}" aria-label="Last page">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+  <nav class="container border-top mt-2 py-2 d-none" id="ads_paginator"
+    aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+      <li class="page-item active">
+        <a class="page-link" href="?page=1" aria-label="Previous page">1</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page=2" aria-label="Next page">2</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page=last" aria-label="Last page">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</main>
+
+{% endblock %}

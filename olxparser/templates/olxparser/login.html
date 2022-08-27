@@ -1,0 +1,69 @@
+{% extends 'olxparser/layout.html' %}
+
+{% block body %}
+
+{% block title %}
+  <link rel="stylesheet" href="https://getbootstrap.com/docs/4.6/examples/floating-labels/floating-labels.css">
+  <title>Вход</title>
+  <style>
+    code { font-size: 100% }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <form class="form-signin" method="POST">
+    {% csrf_token %}
+    <div class="text-center mb-4">
+      <img class="rounded-lg mb-2" src="https://categories.olxcdn.com/assets/categories/olxua/transport-1532-2x.png" alt="" width="120" height="120">
+      <h1 class="h3 mb-3 font-weight-normal">Легковые автомобили с OLX</h1>
+      <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Данные для входа</h4>
+        <p>Чтобы войти, воспользуйтесь одной из трёх доступных ролей.</p>
+        <hr class="border-warning">
+        <div class="d-flex justify-content-between">
+        <p class="w-100 border-right border-warning mb-0">
+            <b>Пользователь №1</b><br>
+            Login: <code>user1</code><br>
+            Password: <code>user123</code>
+        </p>
+        <p class="w-100 border-left border-right border-warning mb-0">
+            <b>Пользователь №2</b><br>
+            Login: <code>user2</code><br>
+            Password: <code>user456</code>
+        </p>
+        <p class="w-100 border-left border-warning mb-0">
+            <b>Пользователь №3</b><br>
+            Login: <code>user3</code><br>
+            Password: <code>user789</code>
+        </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="form-label-group">
+      <input class="form-control" id="inputEmail" type="text" name="username" placeholder="Login" required="" autofocus="">
+      <label for="inputEmail">Login</label>
+    </div>
+  
+    <div class="form-label-group">
+      <input class="form-control" id="inputPassword" type="password" name="password" placeholder="Password" required="">
+      <label for="inputPassword">Password</label>
+    </div>
+  
+    <div class="checkbox mb-3">
+      {% for message in messages %}
+        <hr class="mb-2">
+        <p class="d-flex justify-content-center align-items-center text-danger">
+          <svg aria-hidden="true" class="mr-1" fill="currentColor" focusable="false" width="16px" height="16px" viewBox="0 0 24 24" xmlns="https://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+          </svg>
+          {{ message }}
+        </p>
+      {% endfor %}
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    <p class="mt-5 mb-3 text-muted text-center">© 2022 • Created by <a href="https://alex-gol.herokuapp.com">Alexander Holubtsov</a></p>
+  </form>
+{% endblock %}
+
+{% endblock %}

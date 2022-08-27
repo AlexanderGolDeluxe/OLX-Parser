@@ -1,0 +1,33 @@
+{% extends 'olxparser/layout.html' %}
+{% load static %}
+
+{% block title %}
+<title>Легковые автомобили</title>
+{% endblock %}
+
+{% block body %}
+
+<header>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="{% url 'index_page' %}">
+        <img src="{% static 'olxparser/img/olx_logo.png' %}" width="75" height="50" alt="OLX Logo">
+      </a>
+      <p class="lead text-white mb-0">
+        Вы вошли как <span class="text-primary font-weight-bolder">{{ request.user.first_name }}</span>
+      </p>
+      <a class="btn btn-outline-secondary" href="{% url 'logout' %}">
+        Выйти
+      </a>
+    </div>
+  </div>
+</header>
+
+{% block content %}{% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
+<script src="https://getbootstrap.com/docs/4.6/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'olxparser/js/main.js' %}"></script>
+
+{% endblock %}
