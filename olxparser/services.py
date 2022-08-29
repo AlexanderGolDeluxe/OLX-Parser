@@ -110,11 +110,13 @@ def get_cars_ads_by_link(cars_ads, page_url):
 def get_cars_ads_data(cars_ads_data, car_ad_soup):
     """Парсит из объекта объявления ссылку на него в сети,
     заголовок и цену машины, а после вносит эти данные в общий список"""
+    car_price_soup = car_ad_soup.find("p", {"data-testid": "ad-price"})
     car_ad_data = dict(
         link_to_ad = settings.OLX_URL + car_ad_soup.find("a").get("href"),
         title_ad = car_ad_soup.find("h6").text,
         car_price = (
-            car_ad_soup.find("p", {"data-testid": "ad-price"}).text.rstrip("Договорная").strip()
+            car_price_soup.text.rstrip("Договорная").strip()
+            if car_price_soup else ""
         )
     )
     with LOCKER:
